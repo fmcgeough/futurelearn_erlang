@@ -13,6 +13,9 @@ perimeter(circle, {_X, _Y, R}) ->
 perimeter(triangle, {A, B, C}) ->
   A + B + C.
 
+% Provide functions to calculate the area of various objects. Rectangle and
+% circle are straight-forward. Triangle is calculated using Heron's formula
+% http://www.mathwarehouse.com/geometry/triangles/area/herons-formula-triangle-area.php
 area(rectangle, {_X, _Y, H, W}) ->
   H * W.
 area(circle, {_X, _Y, R}) ->
