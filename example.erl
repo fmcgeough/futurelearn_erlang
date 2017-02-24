@@ -34,7 +34,7 @@ enclose(triangle, {A, B, C}) ->
    W = max(A,max(B,C)),
    T = {A, B, C},
    H = area(triangle, T)/(1/2*W),
-   {rectangle, {H, W}}.
+   {rectangle, {0, 0, H, W}}.
 
 % Provide function to calculate number of bits in a positive integer using
 % direct recursion. We count bits by using Erlang bitwise operators.
