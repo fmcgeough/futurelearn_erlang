@@ -13,6 +13,14 @@ perimeter(circle, {_X, _Y, R}) ->
 perimeter(triangle, {A, B, C}) ->
   A + B + C.
 
+area(rectangle, {_X, _Y, H, W}) ->
+  H * W.
+area(circle, {_X, _Y, R}) ->
+  math:pi() * R * R.
+area(triangle, {A, B, C}) ->
+  S = (A+B+C)/2,
+  math:sqrt(S*(S-A)*(S-B)*(S-C)).
+
 % Provide function to calculate number of bits in a positive integer using
 % direct recursion. We count bits by using Erlang bitwise operators.
 bits(0) -> 0;
