@@ -1,7 +1,7 @@
 %%% @doc Functional Programming in Erlang example code
 -module(example).
 -include_lib("eunit/include/eunit.hrl").
--export([perimeter/2,bits/1,tail_bits/1]).
+-export([perimeter/2,bits/1,tail_bits/1,area/2,enclose/2]).
 
 % Provide functions to calculate perimeter for various objects. The
 % atom provided as first parameter identifies the object type. The tuple
@@ -17,12 +17,24 @@ perimeter(triangle, {A, B, C}) ->
 % circle are straight-forward. Triangle is calculated using Heron's formula
 % http://www.mathwarehouse.com/geometry/triangles/area/herons-formula-triangle-area.php
 area(rectangle, {_X, _Y, H, W}) ->
-  H * W.
+  H * W;
 area(circle, {_X, _Y, R}) ->
-  math:pi() * R * R.
+  math:pi() * R * R;
 area(triangle, {A, B, C}) ->
   S = (A+B+C)/2,
   math:sqrt(S*(S-A)*(S-B)*(S-C)).
+
+% Provide functions to return the smallest enclosing rectangle of the caller's
+% object.
+enclose(rectangle, {X, Y, H, W}) ->
+  {rectangle, {X, Y, H, W}};
+enclose(circle, {X, Y, R}) ->
+  {rectangle, {X, Y, 2*R, 2*R}};
+enclose(triangle, {A, B, C}) ->
+   W = max(A,max(B,C)),
+   T = {A, B, C},
+   H = area(triangle, T)/(1/2*W),
+   {rectangle, {H, W}}.
 
 % Provide function to calculate number of bits in a positive integer using
 % direct recursion. We count bits by using Erlang bitwise operators.
