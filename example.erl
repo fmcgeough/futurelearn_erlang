@@ -41,14 +41,14 @@ enclose(triangle, {A, B, C}) ->
 bits(0) -> 0;
 bits(N) when N > 0 ->
   bits(N bsr 1) + (N band 1).
-tail_bits(0) -> 0;
-tail_bits(N) -> do_tail_bits(N, 0).
 
 % Provide function to calculate number of bits in a positive integer using
 % tail recursion. Same bit technique as direct.
-do_tail_bits(0, S) -> S;
-do_tail_bits(N, S) ->
-  do_tail_bits(N bsr 1, S + (N band 1)).
+tail_bits(0) -> 0;
+tail_bits(N) -> tail_bits(N, 0).
+tail_bits(0, S) -> S;
+tail_bits(N, S) ->
+  tail_bits(N bsr 1, S + (N band 1)).
 
 % Tests - using eunit. From Erlang shell.
 % 1> c(example).
