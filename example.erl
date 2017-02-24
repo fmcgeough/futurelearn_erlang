@@ -1,0 +1,50 @@
+%%% @doc Functional Programming in Erlang example code
+-module(example).
+-include_lib("eunit/include/eunit.hrl").
+-export([perimeter/2,bits/1,tail_bits/1]).
+
+% Provide functions to calculate perimeter for various objects. The
+% atom provided as first parameter identifies the object type. The tuple
+% that follows provides object details.
+perimeter(rectangle, {_X, _Y, H, W}) ->
+  (H * 2) + (W * 2);
+perimeter(circle, {_X, _Y, R}) ->
+  2 * math:pi() * R;
+perimeter(triangle, {A, B, C}) ->
+  A + B + C.
+
+% Provide function to calculate number of bits in a positive integer using
+% direct recursion. We count bits by using Erlang bitwise operators.
+bits(0) -> 0;
+bits(N) when N > 0 ->
+  bits(N bsr 1) + (N band 1).
+tail_bits(0) -> 0;
+tail_bits(N) -> do_tail_bits(N, 0).
+
+% Provide function to calculate number of bits in a positive integer using
+% tail recursion. Same bit technique as direct.
+do_tail_bits(0, S) -> S;
+do_tail_bits(N, S) ->
+  do_tail_bits(N bsr 1, S + (N band 1)).
+
+% Tests - using eunit. From Erlang shell.
+% 1> c(example).
+% {ok,example}
+% 2> example:test().
+%   All 9 tests passed.
+% ok
+
+% Perimeter tests
+perimeter_triangle_test() -> ?assert(perimeter(triangle, {3, 4, 5}) =:= 12).
+perimeter_circle_test() -> ?assert(perimeter(circle, {2, 2, 4}) =:= 25.132741228718345).
+perimeter_rectangle_test() -> ?assert(perimeter(rectangle, {2, 2, 4, 4}) =:= 16).
+
+% Bits test (direct recursion)
+bits_0_test() -> ?assert(bits(0) =:= 0).
+bits_1_test() -> ?assert(bits(1) =:= 1).
+bits_large_test() -> ?assert(bits(63) =:= 6).
+
+% Bits test (tail recursion)
+tail_bits_0_test() -> ?assert(tail_bits(0) =:= 0).
+tail_bits_1_test() -> ?assert(tail_bits(1) =:= 1).
+tail_bits_large_test() -> ?assert(tail_bits(63) =:= 6).
