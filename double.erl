@@ -44,33 +44,35 @@ median(Xs, Length, _) ->
 % This code works by getting occurrence counts of each element in the caller's
 % list into the CL (counted list) variable where each element in the list is
 % a struct of {Count,Value}. Then we find the highest count in that list. Then
-% we find all Values in the list with that Count.
+% we find all Values in the list with that Count (there can be more than one).
 modes(L) when L =/= [] ->
-    CL = count_elements(L,[]),
-    Mode = find_mode(CL, {0,0}),
-    modes(CL, Mode, []).
+    CL = create_counted_list(L,[]),
+    [Head|_] = CL,              % just grab first element for parameter to find_mode
+    Mode = find_high_count(CL, Head),
+    find_matching_modes(CL, Mode, []).
 
-modes([], _, Acc) -> Acc;
-modes([X|Xs], {ModeCount, _ModeVal} = Mode, Acc) ->
+find_matching_modes([], _, Acc) -> Acc;
+find_matching_modes([X|Xs], {ModeCount, _ModeVal} = Mode, Acc) ->
   {Count,Element} = X,
   case Count == ModeCount of
-    true -> modes(Xs, Mode, [Element | Acc]);
-    _ -> modes(Xs, Mode, Acc)
+    true -> find_matching_modes(Xs, Mode, [Element | Acc]);
+    _ -> find_matching_modes(Xs, Mode, Acc)
   end.
 
-find_mode([], Mode) -> Mode;
-find_mode([X|Xs], {ModeCount, _ModeVal} = Mode) ->
+% Search through the List to find the struct with the highest occurrence count
+find_high_count([], Mode) -> Mode;
+find_high_count([X|Xs], {ModeCount, _ModeVal} = Mode) ->
   {Count,_Element} = X,
   case Count > ModeCount of
-    true -> find_mode(Xs, X);
-    _ -> find_mode(Xs, Mode)
+    true -> find_high_count(Xs, X);
+    _ -> find_high_count(Xs, Mode)
   end.
 
 % For each Value in the List add 1 to its current Count. If the Value hasn't
 % been found yet we set its Count to 1.
-count_elements([], Acc) -> Acc;
-count_elements([X|Xs], Acc) ->
-  count_elements(Xs, increment(Acc, X, [], 0)).
+create_counted_list([], Acc) -> Acc;
+create_counted_list([X|Xs], Acc) ->
+  create_counted_list(Xs, increment(Acc, X, [], 0)).
 
 % Increment the Count for a Value. If we haven't found the Value in our
 % new "Counted List" so far we insert it with a Count of 1.
