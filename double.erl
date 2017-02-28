@@ -91,20 +91,20 @@ increment([X|Xs], Val, Acc, Found) ->
 
 
 % Test double
-double_single_test() -> ?assert(double([1]) =:= [2]).
-double_long_test() -> ?assert(double([1,2,3,4]) =:= [2,4,6,8]).
+double_test() -> ?assert(double([1]) =:= [2]),
+                 ?assert(double([1,2,3,4]) =:= [2,4,6,8]).
 
 % Test evens
-evens_none_test() -> ?assert(evens([1]) =:= []).
-evens_one_test() ->  ?assert(evens([2]) =:= [2]).
-evens_many_test() -> ?assert(evens([1,2,3,4,5,6,7,8]) =:= [2,4,6,8]).
+evens_test() -> ?assert(evens([1]) =:= []),
+                ?assert(evens([2]) =:= [2]),
+                ?assert(evens([1,2,3,4,5,6,7,8]) =:= [2,4,6,8]).
 
 % Test median
-median_one_test() -> ?assert(median([1]) =:= 1).
-median_even_test() -> ?assert(median([1,2,3,4]) =:= 2.5).
-median_odd_test() -> ?assert(median([1,2,3,4,5]) =:= 3).
+median_test() -> ?assert(median([1]) =:= 1),
+                 ?assert(median([1,2,3,4]) =:= 2.5),
+                 ?assert(median([1,2,3,4,5]) =:= 3).
 
 % Test modes()
-modes_single_test() -> ?assert(modes([1]) =:= [1]).
-modes_long_test() -> ?assert(modes([1,1,2,2,3,3,3,1,1]) =:= [1]).
-modes_multiple_test() -> ?assert(double:modes([1,1,2,2,3,3,3,1,1,3]) =:= [3,1]).
+modes_test() -> ?assert(modes([1]) =:= [1]),
+                ?assert(modes([1,1,2,2,3,3,3,1,1]) =:= [1]),
+                ?assert(double:modes([1,1,2,2,3,3,3,1,1,3]) =:= [3,1]).
